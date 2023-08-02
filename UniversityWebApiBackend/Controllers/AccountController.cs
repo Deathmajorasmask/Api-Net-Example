@@ -16,6 +16,8 @@ namespace UniversityWebApiBackend.Controllers
         {
             _jwtSettings = jwtSettings;
         }
+
+        // Examples: Change users in DB
         private IEnumerable<Users> Logins = new List<Users>()
         {
             new Users()

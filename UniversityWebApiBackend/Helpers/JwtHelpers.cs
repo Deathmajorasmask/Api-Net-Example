@@ -15,7 +15,7 @@ namespace UniversityWebApiBackend.Helpers
                 new Claim(ClaimTypes.Name, userAccounts.UserName),
                 new Claim(ClaimTypes.Email, userAccounts.EmailId),
                 new Claim(ClaimTypes.NameIdentifier,Id.ToString()),
-                new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddDays(1).ToString("MMM ddd dd yyyy HH:mm:ss"))
+                new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddDays(1).ToString("MMM ddd dd yyyy HH:mm:ss tt"))
             };
 
             if(userAccounts.UserName == "Admin")
