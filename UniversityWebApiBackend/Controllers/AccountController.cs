@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UniversityWebApiBackend.DataAccess;
 using UniversityWebApiBackend.Helpers;
 using UniversityWebApiBackend.Models.DataModels;
 
@@ -12,9 +13,11 @@ namespace UniversityWebApiBackend.Controllers
     public class AccountController : ControllerBase
     {
         private readonly JwtSettings _jwtSettings;
-        public AccountController(JwtSettings jwtSettings)
+        private readonly UniversityDBContext _context;
+        public AccountController(UniversityDBContext context, JwtSettings jwtSettings)
         {
             _jwtSettings = jwtSettings;
+            _context = context;
         }
 
         // Examples: Change users in DB
@@ -42,6 +45,7 @@ namespace UniversityWebApiBackend.Controllers
             try
             {
                 var token = new UserTokens();
+
                 var valid = Logins.Any(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
                 if (valid)
                 {
