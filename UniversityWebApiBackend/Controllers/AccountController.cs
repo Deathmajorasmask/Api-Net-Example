@@ -16,8 +16,8 @@ namespace UniversityWebApiBackend.Controllers
         private readonly UniversityDBContext _context;
         public AccountController(UniversityDBContext context, JwtSettings jwtSettings)
         {
-            _jwtSettings = jwtSettings;
             _context = context;
+            _jwtSettings = jwtSettings;
         }
 
         // Examples: Change users in DB
@@ -46,15 +46,23 @@ namespace UniversityWebApiBackend.Controllers
             {
                 var token = new UserTokens();
 
-                var valid = Logins.Any(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
-                if (valid)
+                // Search a user in context with LINQ
+                var searchUser = (from user in _context.Users
+                                 where user.Name == userLogins.UserName && user.Password == userLogins.Password
+                                 select user).FirstOrDefault();
+
+                Console.WriteLine($"User found: {searchUser}");
+
+                // var valid = Logins.Any(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
+                if (searchUser != null)
                 {
-                    var user = Logins.FirstOrDefault(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
+                    //var user = Logins.FirstOrDefault(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
+                    
                     token = JwtHelpers.GenTokenKey(new UserTokens()
                     {
-                        UserName = user.Name,
-                        EmailId = user.Email,
-                        Id = user.Id,
+                        UserName = searchUser.Name,
+                        EmailId = searchUser.Email,
+                        Id = searchUser.Id,
                         GuidId = Guid.NewGuid(),
                     }, _jwtSettings);
                 }
